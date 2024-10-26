@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Fruit Game</title>
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+	body {
+    	    background: #000 url(body-bg.webp) no-repeat;
+	        width: 100%;
+            margin: 0px auto 0px;
+	}
+
+        .game-container {
+    	    background: url(bg.webp) no-repeat;
+	    background-position: center top;
+            max-width: 350px;
+	        width: 100%;
+            margin: 10px auto 0;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 0;
+        }
+        
+        .game-board {
+	    width: 100%;
+	    margin: 0px auto 0px;
+            padding: 5px 0;
+            display: inline-block;
+            position: relative;
+        }
+        
+        .square-grid {
+            display: grid;
+            grid-template-areas: 
+                "top top top top top top top"
+                "left . . . . . right"
+                "left . . . . . right"
+                "left . . . . . right"
+                "left . . . . . right"
+                "left . . . . . right"
+                "bottom bottom bottom bottom bottom bottom bottom";
+            gap: 5px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .fruit {
+            width: 38.7px;
+            height: 38.5px;
+            border: 2px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .top-row, .bottom-row, .left-column, .right-column {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .top-row {
+            grid-area: top;
+        }
+        
+        .bottom-row {
+            grid-area: bottom;
+        }
+        
+        .left-column {
+            grid-area: left;
+            flex-direction: column;
+        }
+        
+        .right-column {
+            grid-area: right;
+            flex-direction: column;
+        }
+        
+        .fruit.highlighted {
+            background-color: #fbb002;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.5);
+            z-index: 1;
+        }
+        
+        .fruit.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .fruit-selection {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 5px 0 20px 0;
+        }
+        
+        .controls {
+            padding: 0px 0px 10px 0px;
+        }
+        
+        .stat1 {
+	    width: 30%;
+	    float: left;	
+            gap: 20px;
+            margin: 10px 0;
+	    padding: 5px 0 0 0;
+            font-size: 14px;
+	    font-weight: bold;
+	    color: #fdb105;
+        }
+        
+        .stat2 {
+	    width: 40%;
+	    float: right;	
+            gap: 20px;
+            margin: 10px 0;
+            font-size: 14px;
+	    font-weight: bold;
+	    color: #fdb105;
+        }
+        
+        .play {
+	    background: url(start.webp);
+	    width: 120px;
+	    height: 47px;
+	    border: none;
+            cursor: pointer;
+        }
+        
+        .play:hover {
+	    background: url(start-hover.webp);
+        }
+        
+        .play:disabled {
+            opacity: 0.5;
+        }
+        
+        .reset {
+	    background: url(reset.webp);
+	    width: 25px;
+	    height: 25px;
+	    border: none;
+            cursor: pointer;
+        }
+        
+        .reset:hover {
+	    opacity: 0.5;
+        }
+
+	.reset-button {
+	    width: 25px;
+	    height: 25px;
+	    padding: 0px 10px 10px 0;
+	    float: right;
+	}
+        
+        input {
+	    background: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+            width: 50px;
+            margin: 0 10px;
+	    border: none;
+	    font-family: arial;
+            font-size: 12px;
+	    font-weight: bold;
+	    color: #fdb105;
+	    text-align: center;
+	    -moz-appearance: textfield;
+        }
+
+	#msg-holder {
+    	    z-index: 100;
+	}
+
+	#message { 
+   	    background: #aa0604;
+	    width: 180px;
+	    margin: -35px auto 0px;
+    	    padding: 10px;
+    	    color: #fff992;
+    	    border-radius: 10px;
+    	    z-index: 100;
+    	    animation: fadeOut 2s forwards;
+    	    animation-delay: 3s;
+	    text-align: center;
+	    font-family: arial;
+	    display: none;	   
+	    opacity: 0.9;
+	    border: 2px solid #730200;	
+	}
+
+        .selections-display {
+	    display: none;
+        }
+        
+        .inner-square {
+            background: #f8f8f8;
+            border-radius: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-board">
+            <div class="square-grid">
+                <div class="top-row"></div>
+                <div class="left-column"></div>
+                <div class="right-column"></div>
+                <div class="bottom-row"></div>
+            </div>
+	    <div class="stat1">
+        	<div>Points: <span id="points">20</span></div>
+	    </div>
+            <div class="stat2">
+                <div>Bet: <input type="number" id="betAmount" value="1" min="1"></div>
+            </div>
+	        <div style="clear: both;"></div>	
+            <div class="selections-display" id="selectionsDisplay"></div>
+            <div class="fruit-selection" id="fruitSelection"></div>
+        </div>
+        <div class="controls">
+            <button id="startButton" class="play">&nbsp</button>
+        </div>
+	<div class="reset-button">	
+	    <button type="button" class="reset" onClick="window.location.reload();">&nbsp;</button>
+        </div>
+	<div style="clear: both;"></div>
+    <div id="msg-holder">
+        <div id="message"></div>
+    </div>
+    </div>
+    <script>
+        class FruitGame {
+            constructor() {
+                // Different fruits for each side
+                this.topFruits = ['🍎', '🍐', '🍊', '🍋', '🍌', '🥑', '🍇'];
+                this.rightFruits = ['🍐', '🥑', '🍎', '🍇', '🍌'];
+                this.bottomFruits = ['🥑', '🍌', '🍊', '🍎', '🍇', '🍋', '🍐'];
+                this.leftFruits = ['🍐', '🥑', '🍎', '🍌', '🍇'];
+                
+                this.selectionFruits = ['🍎', '🍊', '🥑', '🍋', '🍇', '🍌', '🍐'];
+                this.points = 20;
+                this.selectedFruits = new Set();
+                this.isSpinning = false;
+                this.currentPosition = 0;
+                this.grid = [];
+                this.speed = 100;
+                // Sound effects
+                this.sounds = {
+                    tick: new Audio('win.mp3'),
+                    win: new Audio('tick.mp3'),
+                    lose: new Audio('lose.mp3')
+                };
+                
+                this.initializeGame();
+                this.setupEventListeners();
+            }
+            
+            createFruitElement(fruit) {
+                const el = document.createElement('div');
+                el.className = 'fruit';
+                el.textContent = fruit;
+                this.grid.push(el);
+                return el;
+            }
+            
+            initializeGame() {
+                const topRow = document.querySelector('.top-row');
+                const bottomRow = document.querySelector('.bottom-row');
+                const leftColumn = document.querySelector('.left-column');
+                const rightColumn = document.querySelector('.right-column');
+                const selectionContainer = document.getElementById('fruitSelection');
+                
+                // Create rows and columns
+                this.topFruits.forEach(fruit => topRow.appendChild(this.createFruitElement(fruit)));
+                this.bottomFruits.forEach(fruit => bottomRow.appendChild(this.createFruitElement(fruit)));
+                this.leftFruits.forEach(fruit => leftColumn.appendChild(this.createFruitElement(fruit)));
+                this.rightFruits.forEach(fruit => rightColumn.appendChild(this.createFruitElement(fruit)));
+                
+                // Create fruit selection
+                this.selectionFruits.forEach(fruit => {
+                    const fruitEl = document.createElement('div');
+                    fruitEl.className = 'fruit';
+                    fruitEl.textContent = fruit;
+                    fruitEl.addEventListener('click', () => this.toggleFruit(fruit));
+                    selectionContainer.appendChild(fruitEl);
+                });
+            }
+            
+            setupEventListeners() {
+                document.getElementById('startButton').addEventListener('click', () => this.startGame());
+            }
+            
+            toggleFruit(fruit) {
+                if (this.isSpinning) return;
+                
+                if (this.selectedFruits.has(fruit)) {
+                    this.selectedFruits.delete(fruit);
+                } else {
+                    this.selectedFruits.add(fruit);
+                }
+                
+                this.updateSelectionDisplay();
+                
+                document.querySelectorAll('.fruit-selection .fruit').forEach(el => {
+                    el.classList.toggle('selected', this.selectedFruits.has(el.textContent));
+                });
+            }
+            
+            updateSelectionDisplay() {
+                const display = document.getElementById('selectionsDisplay');
+                if (this.selectedFruits.size === 0) {
+                    display.textContent = 'Selected fruits will appear here';
+                } else {
+                    display.textContent = Array.from(this.selectedFruits).join(' ');
+                }
+            }
+            
+            updatePoints(amount) {
+                this.points += amount;
+                document.getElementById('points').textContent = this.points;
+            }
+            
+            startGame() {
+                if (this.isSpinning || this.selectedFruits.size === 0) {
+                    document.getElementById("message").style.display = "block";
+                    document.getElementById('message').textContent = 'Select at least one fruit!';
+                    return;
+                }
+                
+                const betAmount = parseInt(document.getElementById('betAmount').value);
+                const totalBet = betAmount * this.selectedFruits.size;
+                
+                if (totalBet > this.points || betAmount < 1) {
+                    document.getElementById("message").style.display = "block";
+                    document.getElementById('message').textContent = 'Invalid bet amount!';
+                    return;
+                }
+                
+                this.isSpinning = true;
+                document.getElementById('startButton').disabled = true;
+                document.getElementById("message").style.display = "none";
+                this.updatePoints(-totalBet);
+                
+                let spins = 20 + Math.floor(Math.random() * 10);
+                this.spin(spins, betAmount);
+            }
+            
+            spin(spins, betAmount) {
+                this.sounds.tick.currentTime = 0;
+                this.sounds.tick.play();
+                
+                this.grid[this.currentPosition].classList.remove('highlighted');
+                this.currentPosition = (this.currentPosition + 1) % this.grid.length;
+                this.grid[this.currentPosition].classList.add('highlighted');
+                
+                if (spins > 0) {
+                    setTimeout(() => this.spin(spins - 1, betAmount), this.speed);
+                } else {
+                    this.endGame(betAmount);
+                }
+            }
+            
+            endGame(betAmount) {
+                const winningFruit = this.grid[this.currentPosition].textContent;
+                let message = '';
+                
+                if (this.selectedFruits.has(winningFruit)) {
+                    const winnings = betAmount * 3;
+                    message = `Congratulations! You won ${winnings} points with ${winningFruit}!`;
+                    this.updatePoints(winnings);
+                    this.sounds.win.play();
+                } else {
+                    message = 'Better luck next time!';
+                    this.sounds.lose.play();
+                }
+
+                document.getElementById("message").style.display = "block";
+                document.getElementById('message').textContent = message;
+                this.isSpinning = false;
+                document.getElementById('startButton').disabled = false;
+            }
+        }
+        
+        // Initialize the game
+        const game = new FruitGame();
+    </script>
+</body>
+</html>
