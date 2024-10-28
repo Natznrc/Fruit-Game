@@ -100,44 +100,44 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 5px 0 20px 0;
+            margin: 10px 0 20px 0;
         }
         
         .controls {
-            padding: 0px 0px 10px 0px;
+            padding: 0px 0px 20px 0px;
         }
         
         .stat1 {
-	    width: 30%;
-	    float: left;	
+	        width: 50%;
+	        float: left;	
             gap: 20px;
-            margin: 10px 0;
-	    padding: 5px 0 0 0;
-            font-size: 14px;
-	    font-weight: bold;
-	    color: #fdb105;
+            margin: 5px 0;
+	        padding: 5px 0 0 0;
+            font-size: 28px;
+	        font-weight: bold;
+	        color: #fdb105;
         }
         
         .stat2 {
-	    width: 40%;
-	    float: right;	
+	        width: 40%;
+	        float: right;	
             gap: 20px;
             margin: 10px 0;
-            font-size: 14px;
-	    font-weight: bold;
-	    color: #fdb105;
+            font-size: 25px;
+	        font-weight: bold;
+	        color: #fdb105;
         }
         
         .play {
-	    background: url(start.webp);
-	    width: 120px;
-	    height: 47px;
-	    border: none;
+	        background: url(start.webp);
+	        width: 120px;
+	        height: 47px;
+	        border: none;
             cursor: pointer;
         }
         
         .play:hover {
-	    background: url(start-hover.webp);
+	        background: url(start-hover.webp);
         }
         
         .play:disabled {
@@ -145,61 +145,77 @@
         }
         
         .reset {
-	    background: url(reset.webp);
-	    width: 25px;
-	    height: 25px;
-	    border: none;
+	        background: url(reset.webp);
+	        width: 25px;
+	        height: 25px;
+	        border: none;
             cursor: pointer;
         }
         
         .reset:hover {
-	    opacity: 0.5;
+	        opacity: 0.5;
         }
 
-	.reset-button {
-	    width: 25px;
-	    height: 25px;
-	    padding: 0px 10px 10px 0;
-	    float: right;
-	}
+	    .reset-button {
+	        width: 25px;
+	        height: 25px;
+	        margin: -10px 0 0 0;
+	        padding: 0px 5px 0px 0px;
+	        float: right;
+	    }
+	    
+	    #reset-text {
+	        margin: 15px 0 0 0;
+	        font-size: 12px;
+	        color: #fdb105;
+	        text-align: right;
+	        animation: blinker 1s linear infinite;
+	        display: none;
+	    }
+	    
+	    @keyframes blinker {
+            90% {
+                opacity: 0;
+            }
+        }
         
         input {
-	    background: rgba(0, 0, 0, 0.5);
+	        background: rgba(0, 0, 0, 0.5);
             padding: 5px;
             width: 50px;
             margin: 0 10px;
-	    border: none;
-	    font-family: arial;
-            font-size: 12px;
-	    font-weight: bold;
-	    color: #fdb105;
-	    text-align: center;
-	    -moz-appearance: textfield;
+	        border: none;
+	        font-family: arial;
+            font-size: 20px;
+	        font-weight: bold;
+	        color: #fdb105;
+	        text-align: center;
+	        -moz-appearance: textfield;
         }
 
-	#msg-holder {
+	    #msg-holder {
     	    z-index: 100;
-	}
+	    }
 
-	#message { 
-   	    background: #aa0604;
-	    width: 180px;
-	    margin: -35px auto 0px;
+	    #message { 
+   	        background: #aa0604;
+	        width: 180px;
+	        margin: -5px auto 0px;
     	    padding: 10px;
     	    color: #fff992;
     	    border-radius: 10px;
     	    z-index: 100;
     	    animation: fadeOut 2s forwards;
     	    animation-delay: 3s;
-	    text-align: center;
-	    font-family: arial;
-	    display: none;	   
-	    opacity: 0.9;
-	    border: 2px solid #730200;	
-	}
+	        text-align: center;
+	        font-family: arial;
+	        display: none;	   
+	        opacity: 0.9;
+	        border: 2px solid #730200;	
+	    }
 
         .selections-display {
-	    display: none;
+	        display: none;
         }
         
         .inner-square {
@@ -207,6 +223,23 @@
             border-radius: 5px;
             margin: 5px;
         }
+        
+        .col50 {
+            width: 50%;
+        }
+        
+        .col25 {
+            width: 25%;
+        }
+        
+        .fleft {
+            float: left;
+        } 
+        
+        .fright {
+            float: right;
+        } 
+        
     </style>
 </head>
 <body>
@@ -229,22 +262,27 @@
             <div class="fruit-selection" id="fruitSelection"></div>
         </div>
         <div class="controls">
-            <button id="startButton" class="play">&nbsp</button>
+            <div class="col25 fleft">&nbsp;</div>
+            <div class="col50 fleft">
+                <button id="startButton" class="play">&nbsp</button>
+            </div>
+            <div id="reset-text" class="col25 fleft">RESET</div>
         </div>
-	<div class="reset-button">	
-	    <button type="button" class="reset" onClick="window.location.reload();">&nbsp;</button>
+	    <div style="clear: both;"></div>
+	    <div class="reset-button">	
+	        <button type="button" class="reset" onClick="window.location.reload();">&nbsp;</button>
         </div>
-	<div style="clear: both;"></div>
-    <div id="msg-holder">
-        <div id="message"></div>
-    </div>
+	    <div style="clear: both;"></div>
+        <div id="msg-holder">
+            <div id="message"></div>
+        </div>
     </div>
     <script>
         class FruitGame {
             constructor() {
                 // Different fruits for each side
                 this.topFruits = ['🍎', '🍐', '🍊', '🍋', '🍌', '🥑', '🍇'];
-                this.rightFruits = ['🍐', '🥑', '🍎', '🍇', '🍌'];
+                this.rightFruits = ['50', '50', '50', '50', '50'];
                 this.bottomFruits = ['🥑', '🍌', '🍊', '🍎', '🍇', '🍋', '🍐'];
                 this.leftFruits = ['🍐', '🥑', '🍎', '🍌', '🍇'];
                 
@@ -257,8 +295,8 @@
                 this.speed = 100;
                 // Sound effects
                 this.sounds = {
-                    tick: new Audio('win.mp3'),
-                    win: new Audio('tick.mp3'),
+                    tick: new Audio('tick.mp3'),
+                    win: new Audio('win.mp3'),
                     lose: new Audio('lose.mp3')
                 };
                 
@@ -342,6 +380,7 @@
                 const totalBet = betAmount * this.selectedFruits.size;
                 
                 if (totalBet > this.points || betAmount < 1) {
+                    document.getElementById("reset-text").style.display = "block";
                     document.getElementById("message").style.display = "block";
                     document.getElementById('message').textContent = 'Invalid bet amount!';
                     return;
@@ -373,11 +412,17 @@
             
             endGame(betAmount) {
                 const winningFruit = this.grid[this.currentPosition].textContent;
+                const bonus = this.grid[this.currentPosition].textContent;
                 let message = '';
                 
                 if (this.selectedFruits.has(winningFruit)) {
-                    const winnings = betAmount * 3;
+                    const winnings = betAmount * 5;
                     message = `Congratulations! You won ${winnings} points with ${winningFruit}!`;
+                    this.updatePoints(winnings);
+                    this.sounds.win.play();
+                } else if (this.selectedFruits.has(bonus)) {
+                    const bonusamt = betAmount * 50;
+                    message = `Congratulations! You won ${bonusamt} points with ${bonus}!`;
                     this.updatePoints(winnings);
                     this.sounds.win.play();
                 } else {
