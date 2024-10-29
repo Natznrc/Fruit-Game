@@ -419,14 +419,17 @@
                     const winnings = betAmount * 5;
                     message = `Congratulations! You won ${winnings} points with ${winningFruit}!`;
                     this.updatePoints(winnings);
+                    this.sounds.tick.pause();
                     this.sounds.win.play();
                 } else if (this.selectedFruits.has(bonus)) {
                     const bonusamt = betAmount * 50;
                     message = `Congratulations! You won ${bonusamt} points with ${bonus}!`;
                     this.updatePoints(winnings);
+                    this.sounds.tick.pause();
                     this.sounds.win.play();
                 } else {
                     message = 'Better luck next time!';
+                    this.sounds.tick.pause();
                     this.sounds.lose.play();
                 }
 
